@@ -37,6 +37,7 @@ function renderBeerDetails(beer) {
   const edit = document.createElement('button');
   edit.id = 'edit-beer';
   edit.innerText = 'Save';
+  edit.className = 'btn btn-info';
   edit.addEventListener('click', () => {
     const newDesc = document.getElementsByTagName('textarea')[0].value;
     changeDescription(beer, newDesc);
