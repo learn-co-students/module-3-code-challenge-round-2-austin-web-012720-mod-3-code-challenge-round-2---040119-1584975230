@@ -4,7 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchBeers();
   document.addEventListener('click', function(event){
     event.preventDefault();
-    displayBeer(event.target.id);
+    getBeer(event.target.id);
+
   })
 })
 
@@ -32,10 +33,7 @@ function addBeers(beers){
   }
 }
 
-function displayBeer(beerId){
-  let beer = beers[beerId];
-  const beerUrl = `http://localhost:3000/beers/${beer.id}`;
-
+function displayBeer(beer){
   let beerContainer = document.querySelector('#beer-detail');
 
   let name = document.createElement('h1');
@@ -53,4 +51,16 @@ function displayBeer(beerId){
   beerContainer.append(name, image, tag, desc);
 }
 
+function getBeer(beerId){
+  // let beer = beers[beerId];
+  const beerUrl = `http://localhost:3000/beers/${beerId}`;
+
+  fetch(beerUrl)
+    .then(function(response){
+      return response.json();
+    })
+    .then(function(json){
+      displayBeer(json);
+    })
+}
 // edit function -- patch
