@@ -46,7 +46,7 @@ function showBeer(beer) {
 
   // Beer Description
   const beerDesc = document.createElement('textarea');
-  beerDesc.setAttribute('id', 'textarea')
+  beerDesc.setAttribute('id', 'textarea');
   beerDesc.innerText = beer.description;
   beerDetails.append(beerDesc);
 
