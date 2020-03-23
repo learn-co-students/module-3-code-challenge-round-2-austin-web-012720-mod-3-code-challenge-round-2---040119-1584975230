@@ -1,4 +1,4 @@
-//helper function declared at button of code, if el(id) looks unfamiliar
+//helper function declared at buttom of code, if el(id) looks unfamiliar
 
 //setting global constants of elements that will be utilized in multiple functions
 const beerListUl = document.getElementById('list-group')
