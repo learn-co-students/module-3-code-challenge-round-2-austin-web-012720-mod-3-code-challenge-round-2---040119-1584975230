@@ -2,7 +2,7 @@
 const BASE_URL = 'http://localhost:3000'
 const BEERS_URL = `${BASE_URL}/beers`
 
-let beerList = [];
+//let beerList = [];
 
 document.addEventListener('DOMContentLoaded', setup)
 
@@ -14,10 +14,16 @@ function setup(e) {
 function fetchBeerList() {
     fetch(BEERS_URL)
         .then(resp => resp.json())
-        .then(jsonBeerList => {
-            beerList = jsonBeerList; 
+        .then(beerList => {
+            //beerList = jsonBeerList; 
             displayBeerList(beerList)
         });
+}
+
+function fetchBeer(beerId) {
+    fetch(`${BEERS_URL}/${beerId}`)
+        .then(resp => resp.json())
+        .then(beerInfo => displayBeer(beerInfo))
 }
 
 function patchBeer(beerId, newDescription) {
@@ -33,10 +39,6 @@ function patchBeer(beerId, newDescription) {
     
 }
 
-// function fetchBeer(beerId) {
-    
-// }
-
 /* Display functions */
 function displayBeerList(beerList) {
     // console.log(beerList)
@@ -46,10 +48,36 @@ function displayBeerList(beerList) {
     })
 }
 
+function displayBeer(beer) {
+    const beerDiv = el('beer-detail');
+    const nameEl = document.createElement('h1');
+    const imageEl = document.createElement('img');
+    const taglineEl = document.createElement('h3');
+    const descriptionArea = document.createElement('textarea');
+    const buttonEl = document.createElement('button');
 
-// function displayBeer(beer) {
-    
-// }
+    nameEl.innerText = beer.name;
+    imageEl.src = beer.image_url;
+    taglineEl.innerText = beer.tagline;
+    descriptionArea.innerText = beer.description;
+    descriptionArea.id = 'beer-description';
+    buttonEl.id = 'edit-beer';
+    buttonEl.class = 'btn btn-info';
+    buttonEl.innerText = 'Save';
+    buttonEl.addEventListener('click', e => {
+        // console.log("Value: ", descriptionArea.value)
+        // console.log('innerText: ', descriptionArea.innerText)
+        //console.log(beerList[beer.id])
+        //beerList[beer.id].description = descriptionArea.value;
+        patchBeer(beer.id, descriptionArea.value);
+    });
+
+    beerDiv.appendChild(nameEl);
+    beerDiv.appendChild(imageEl);
+    beerDiv.appendChild(taglineEl);
+    beerDiv.appendChild(descriptionArea);
+    beerDiv.appendChild(buttonEl);
+}
 
 /* Button handlers */
 // function handleSaveBeerDescription(e) {
@@ -71,41 +99,13 @@ function makeBeerNameLi(beer) {
     beerLi.addEventListener('click', e => {
         const beerEl = el('beer-detail');
         beerEl.innerHTML = '';
-
-        makeBeerEl(beer);
+        fetchBeer(beer.id)
+        // displayBeer(beerList[beer.id]);
     })
     return beerLi;
 }
 
-function makeBeerEl(beer) {
-    const beerDiv = el('beer-detail');
-    const nameEl = document.createElement('h1');
-    const imageEl = document.createElement('img');
-    const taglineEl = document.createElement('h3');
-    const descriptionArea = document.createElement('textarea');
-    const buttonEl = document.createElement('button');
 
-    nameEl.innerText = beer.name;
-    imageEl.src = beer.image_url;
-    taglineEl.innerText = beer.tagline;
-    descriptionArea.innerText = beer.description;
-    descriptionArea.id = 'beer-description';
-    buttonEl.id = 'edit-beer';
-    buttonEl.class = 'btn btn-info';
-    buttonEl.innerText = 'Save';
-    buttonEl.addEventListener('click', e => {
-        // console.log("Value: ", descriptionArea.value)
-        // console.log('innerText: ', descriptionArea.innerText)
-        beerList[beer.id].description = descriptionArea.value;
-        patchBeer(beer.id,descriptionArea.value);
-    });
-
-    beerDiv.appendChild(nameEl);
-    beerDiv.appendChild(imageEl);
-    beerDiv.appendChild(taglineEl);
-    beerDiv.appendChild(descriptionArea);
-    beerDiv.appendChild(buttonEl);
-}
 
 function el(id) {
     return document.getElementById(id);
