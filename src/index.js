@@ -2,11 +2,6 @@ let beers = {};
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchBeers();
-  document.addEventListener('click', function(event){
-    event.preventDefault();
-    getBeer(event.target.id);
-
-  })
 })
 
 function fetchBeers(){
@@ -17,11 +12,11 @@ function fetchBeers(){
     })
     .then(function(json){
       beers = json;
-      addBeers(beers);
+      displayBeers(beers);
     })
 }
 
-function addBeers(beers){
+function displayBeers(beers){
   const list = document.getElementById('list-group');
 
   for (let i = 0; i < beers.length; i++){
@@ -31,28 +26,43 @@ function addBeers(beers){
     li.id = beers[i].id;
     list.appendChild(li);
   }
+  document.addEventListener('click', function(event){
+    event.preventDefault();
+    if (!isNaN(event.target.id)){
+      getBeer(event.target.id);
+    }
+  })
 }
 
 function displayBeer(beer){
-  let beerContainer = document.querySelector('#beer-detail');
+  const beerContainer = document.querySelector('#beer-detail');
 
-  let name = document.createElement('h1');
+  const name = document.createElement('h1');
   name.innerText = beer.name;
 
-  let image = document.createElement('img');
+  const image = document.createElement('img');
   image.src = beer.image_url;
 
-  let tag = document.createElement('h3');
-  tag = beer.tagline;
+  const tag = document.createElement('h3');
+  tag.innerText = beer.tagline;
 
-  let desc = document.createElement('textarea');
-  desc = beer.description;
+  const desc = document.createElement('textarea');
+  desc.innerText = beer.description;
 
-  beerContainer.append(name, image, tag, desc);
+  const save = document.createElement('button');
+  save.innerText = 'Save';
+  save.className = 'btn btn-info';
+  save.value = 'save';
+
+  beerContainer.append(name, image, tag, desc, save);
+  save.addEventListener('click', function(event){
+    let update = document.querySelector('textarea').value;
+    desc.innerText = update
+    // send patch 
+  })
 }
 
 function getBeer(beerId){
-  // let beer = beers[beerId];
   const beerUrl = `http://localhost:3000/beers/${beerId}`;
 
   fetch(beerUrl)
@@ -63,4 +73,6 @@ function getBeer(beerId){
       displayBeer(json);
     })
 }
+
+
 // edit function -- patch
