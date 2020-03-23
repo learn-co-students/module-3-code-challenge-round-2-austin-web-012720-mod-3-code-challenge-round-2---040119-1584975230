@@ -39,7 +39,7 @@ function beerHTML(beer) {
     const div = el('beer-detail');
     
     div.innerHTML = `<h1>${beer.name}</h1>
-    <img src="">
+    <img src="${beer.image_url}">
     <h3>${beer.tagline}</h3>
     <textarea data-description-id="${beer.id}">${beer.description}</textarea>
     <button id="edit-beer" class="btn btn-info" data-edit-beer-id="${beer.id}">
